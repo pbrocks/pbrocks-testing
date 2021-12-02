@@ -1,2 +1,3 @@
-# aloha-dude
-Transforming *Hello, Dolly* plugin into a method for enqueueing scripts for WordPress.
+# PBrocks Testing
+
+Testing for WordPress, a la: https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/.
