@@ -1,0 +1,28 @@
+{
+    "name": "pbrocks/pbrocks-testing",
+    "description": "A local WordPress development environment for testing code built with Docker.",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "PBrocks",
+            "email": "paul@pbrocks.com",
+            "homepage": "https://pbrocks.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        }
+    ],
+    "extra": {
+        "installer-paths": {
+            "plugins/{$name}/": [
+                "type:wordpress-plugin"
+            ],
+            "themes/{$name}/": [
+                "type:wordpress-theme"
+            ]
+        }
+    }
+}
