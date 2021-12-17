@@ -1,3 +1,15 @@
-# PBrocks Testing
+# PBrocks Dictionary Testing
 
-Testing for WordPress, a la: https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/, a local WordPress development environment for testing code built with Docker.
+
+## Build Docker Container
+
+```sh
+docker-compose up -d
+```
+
+
+## Run Unit Tests
+
+```sh
+docker-compose exec wp composer phpunit
+```

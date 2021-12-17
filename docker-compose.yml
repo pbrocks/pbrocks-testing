@@ -1,53 +1,49 @@
-version: '3'
+# docker-compose.yml
+version: '3.7'
 
 services:
-  php-fpm:
-    image: 10up/phpfpm:7.3
-    depends_on:
-      - db
-    volumes:
-      - "./wordpress:/var/www/html"
-      - "./content:/var/www/html/wp-content"
-      - "./config/php-fpm/php.ini:/usr/local/etc/php/php.ini"
-    restart: always
 
-  nginx:
-    depends_on:
-      - php-fpm
-    ports:
-      - "80:80"
-      - "443:443"
-    image: nginx:latest
-    volumes:
-      - "./wordpress:/var/www/html"
-      - "./content:/var/www/html/wp-content"
-      - "./config/nginx/default.conf:/etc/nginx/conf.d/default.conf"
-    restart: always
-
+  # MySQL database
   db:
     image: mariadb
-    volumes:
-      - "./data:/var/lib/mysql"
-    restart: always
-    ports:
-      - 3306:3306
+    restart: unless-stopped
+    container_name: pbrocks-dictionary
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
+    volumes:
+      - db-data:/var/lib/mysql
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
-  mailcatcher:
-    image: schickling/mailcatcher
-    restart: always
-    ports:
-      - "1025:1025"
-      - "1080:1080"
+  # Wordpress
+  wp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: pbrocks-wp
     environment:
-      MAILCATCHER_PORT: 1025
+      WORDPRESS_DB_HOST: pbrocks-dictionary
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+    volumes:
+      - wp-data:/var/www/html
+      - ./:/var/www/html/wp-content/plugins/pbrocks-dictionary-testing
+    ports:
+      - 8383:80
+    depends_on:
+      - db
+
+# Make network name pretty
+networks:
+  default:
+    name: pbrocks-nettest
+
+# Persist DB and WordPress data across containers
+volumes:
+  db-data: {}
+  wp-data: {}
+
